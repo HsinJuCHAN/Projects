@@ -1,0 +1,31 @@
+#function for calculating the score of sequence
+def calc(list):
+    total = 0
+    for word in list:
+            total += ord(word)-64
+    return total/len(list)
+
+#read files and set a list
+in_file = open("seq_sample.fastq")
+seq_list = in_file.readlines()
+
+#open and ready to write two new files
+f=open("seq_score_above30","w")
+f=open("seq_score_below30","w")
+
+#distinguish the score above or below 30 and append the seq into file for score above/below 30
+for count in range(3,len(seq_list),8):
+    key = seq_list[count].rstrip()
+    key2 = seq_list[count+4].rstrip()
+
+    if (calc(key) >= 30) and (calc(key2) >= 30):
+        for b in range(-3,5):
+            f=open("seq_score_above30","a")
+            f.write(seq_list[count+b])
+            f=open("seq_score_above30","a")
+
+    elif (calc(key) < 30) or (calc(key2) < 30) :
+        for c in range(-3,5):
+            f=open("seq_score_below30","a")
+            f.write(seq_list[count+c])
+            f=open("seq_score_below30","a")

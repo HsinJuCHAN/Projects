@@ -1,0 +1,91 @@
+#-------------------------------------------------------------------------------
+# Name:        Python coursework2
+# Author:      Vivi
+# Created:     01/12/2018
+#-------------------------------------------------------------------------------
+#create a dictionary, key is the index of generation, value is the allele for each generation.
+import random
+import matplotlib.pyplot as plt
+d = {}
+size = 100
+d[0] = []
+plt.rcParams['axes.facecolor']='white'
+
+#Create list for 1st generation:Allele from 0 to 49 is 'A', from 50 to 99 is 'B'
+for i in range(0,int(size)):
+    if(i < int(size/2)):
+        d[0].append('A')
+    elif(i >= int(size/2)):
+        d[0].append('B')
+
+#plot 1st generation
+plt.plot(0,d[0].count("A")/100,'.r-')
+plt.plot(0,d[0].count("B")/100,'.b-')
+
+#Put value in each genereation which is randomly chosen from allele from previous generation.
+for x in range(1,1001):
+    d[x] = []
+    for j in range(0,size):
+        d[x].append(d[x-1][random.randint(0,99)])
+    #input the frequency of each allele in the plot
+    plt.plot(x,d[x].count("A")/100,'.r-')
+    plt.plot(x,d[x].count("B")/100,'.b-')
+    #stop forloop when either of the alleles is completely lost from the population
+    if (d[x].count(d[x][0]) == 100):
+        break
+
+#Plot with title,labels and grid to show
+plt.legend(labels=['allele A','allele B'],loc='best')
+plt.xlabel('Generation')
+plt.ylabel('Allele frequency  (total = 1.0)')
+plt.title('The change in allele frequency in each generation')
+plt.grid(True)
+plt.show()
+
+#-------------------------------------------------------------------------------
+# Name:        Python coursework2 task2
+#-------------------------------------------------------------------------------
+#create a dictionary, key is the index of generation, value is the allele of the generation.
+g = {}
+size = 100
+g[0] = []
+
+#Create list for generation:Allele from 0 to 24 is 'AA', from 25 to 74 is 'Aa', from 75 to 99 is 'aa'
+for i in range(0,100):
+    if(i <= 24):
+        g[0].append('AA')
+    elif(i >= 25 and i <= 74):
+        g[0].append('Aa')
+    elif(i >= 75):
+        g[0].append('aa')
+#plot 1st generation
+plt.plot(0,g[0].count("AA")/100,'.r-')
+plt.plot(0,(g[0].count("Aa")+g[0].count("aA"))/100,'.b-')
+plt.plot(0,g[0].count("aa")/100,'.g-')
+
+#Put value in each genereation which randomly choose allele from each individual in previous generation.
+for x in range(1,500):
+    g[x] = []
+    for j in range(0,size):
+        g[x].append(g[x-1][random.randint(0,99)][random.randint(0,1)]+g[x-1][random.randint(0,99)][random.randint(0,1)])
+    #calculate the amount of 'aa', and replace 20% of 'aa' with new random allele.
+    a = int(g[x].count("aa")/5)
+    for e,f in enumerate(g[x]):
+        if (f == 'aa'and a>0):
+            g[x][e] = (g[x-1][random.randint(0,99)][random.randint(0,1)]+g[x-1][random.randint(0,99)][random.randint(0,1)])
+            a=a-1
+    #input the frequency and generation in plot
+    plt.plot(x,g[x].count("AA")/100,'.r-')
+    plt.plot(x,(g[x].count("Aa")+g[x].count("aA"))/100,'.b-')
+    plt.plot(x,g[x].count("aa")/100,'.g-')
+    #the allele 'a' is completely lost from the population
+    if (g[x].count("Aa")==0 and g[x].count("aa")==0 and g[x].count("aA")==0):
+        break
+
+#Plot with title,labels and grid to show
+plt.legend(labels=['allele AA','allele Aa','allele aa'],loc='best')
+plt.xlabel('Generation')
+plt.ylabel('Allele frequency (total = 1.0)')
+plt.title('The change in allele frequency with each generation')
+plt.grid(True)
+plt.show()
